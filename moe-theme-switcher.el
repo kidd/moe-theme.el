@@ -35,7 +35,7 @@ Take Keelung, Taiwan(25N,121E) for example, you can set like this:
            (progn (load-theme 'moe-dark t)
                   (setq moe-now "dark"))))))
 
-(defun switch-at-fixed-time ()
+(defun moe-switch-at-fixed-time ()
   (let ((now (string-to-int (format-time-string "%H"))))
     (if (and (>= now 06) (<= now 18))
         (moe-load-theme "light")
@@ -44,7 +44,7 @@ Take Keelung, Taiwan(25N,121E) for example, you can set like this:
 
 ;; (Thanks for letoh!)
 ;; Fix strange bahavior of sunrise-sunset when buffer's width is too narrow.
-(defun get-sunrise-sunset-string ()
+(defun moe-get-sunrise-sunset-string ()
   "get the real result from `sunrise-sunset'"
   (save-window-excursion
     (let ((regex "[0-9]+:[0-9]+[ap]m")
@@ -63,9 +63,9 @@ Take Keelung, Taiwan(25N,121E) for example, you can set like this:
 
 ;; Convert am/pm to 24hr and save to 24h/sunrise & 24h/set
 ;; Excute every 24 hr
-(defun convert-time-format-of-sunrise-and-sunset ()
+(defun moe-convert-time-format-of-sunrise-and-sunset ()
   (let (rise_set a b c d e f)
-    (setq rise_set (get-sunrise-sunset-string))
+    (setq rise_set (moe-get-sunrise-sunset-string))
     (if (string-match "0:00 hours daylight" rise_set) ;If polar-night
         (progn
           (setq 24h/sunrise 'polar-night
@@ -90,7 +90,7 @@ Take Keelung, Taiwan(25N,121E) for example, you can set like this:
            (setq 24h/sunset (list d e))))))))
 
 ;; Excute every minute.
-(defun switch-by-locale ()
+(defun moe-switch-by-locale ()
   (if (equal 24h/sunrise 'polar-night)  ;If polar-night...moe-dark!
       (moe-load-theme "dark")
     (if (equal 24h/sunrise 'midnight-sun) ;If midnight-sun...moe-light!
@@ -116,8 +116,8 @@ Take Keelung, Taiwan(25N,121E) for example, you can set like this:
   "Automatically switch between dark and light moe-theme."
   (interactive)
   (if (boundp '24h/sunrise)
-      (switch-by-locale)
-    (switch-at-fixed-time))
+      (moe-switch-by-locale)
+    (moe-switch-at-fixed-time))
   )
 
 (if (and
@@ -125,8 +125,8 @@ Take Keelung, Taiwan(25N,121E) for example, you can set like this:
      (boundp 'calendar-latitude)
      (eql moe-theme-switch-by-sunrise-and-sunset t))
     (progn
-      (convert-time-format-of-sunrise-and-sunset)
-      (run-with-timer 0 (* 60 60 24) 'convert-time-format-of-sunrise-and-sunset))
+      (moe-convert-time-format-of-sunrise-and-sunset)
+      (run-with-timer 0 (* 60 60 24) 'moe-convert-time-format-of-sunrise-and-sunset))
   ()
   )
 
