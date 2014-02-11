@@ -117,18 +117,14 @@ Take Keelung, Taiwan(25N,121E) for example, you can set like this:
   (interactive)
   (if (boundp '24h/sunrise)
       (moe-switch-by-locale)
-    (moe-switch-at-fixed-time))
-  )
+    (moe-switch-at-fixed-time)))
 
-(if (and
-     (boundp 'calendar-longitude)
-     (boundp 'calendar-latitude)
-     (eql moe-theme-switch-by-sunrise-and-sunset t))
-    (progn
-      (moe-convert-time-format-of-sunrise-and-sunset)
-      (run-with-timer 0 (* 60 60 24) 'moe-convert-time-format-of-sunrise-and-sunset))
-  ()
-  )
+(when (and
+       (boundp 'calendar-longitude)
+       (boundp 'calendar-latitude)
+       (eql moe-theme-switch-by-sunrise-and-sunset t))
+  (moe-convert-time-format-of-sunrise-and-sunset)
+  (run-with-timer 0 (* 60 60 24) 'moe-convert-time-format-of-sunrise-and-sunset))
 
 
 (moe-theme-auto-switch)
